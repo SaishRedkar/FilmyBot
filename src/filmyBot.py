@@ -13,9 +13,6 @@ def main():
     print(SLACK_BOT_NAME)
     # Create the slackclient instance
     sc = SlackClient(SLACK_BOT_TOKEN)
-
-    response = requests.get("http://www.omdbapi.com/?t=The+Dark+Knight&plot=full")
-
     data = response.json()
 
     # Connect to slack
@@ -28,16 +25,28 @@ def main():
             for slack_message in sc.rtm_read():
                 message = slack_message.get("text")
                 user = slack_message.get("user")
-                print(message, user)
+               
+                movieName = message[13:]
+                        if(len(movieName.strip()) == 0):
+                            sc.rtm_send_message(channel, "This won't work without a movie name!")
+                        else:
+                            try:
+                                url = "http://www.omdbapi.com/?t="+message[13:]
+                                response = requests.get(url)
+                                print url
+                                if response.status_code==200:
+                                    data = response.json()
+                                    sc.rtm_send_message(channel, data["Title"])
+                                    sc.rtm_send_message(channel, data["Actors"])
+                                    sc.rtm_send_message(channel, data["Released"])
+                            except:
+                                print("api_call error")
+                                sc.rtm_send_message(channel, "Hey "+"<@"+user+"> !"+" I couldn't find this movie")
 
-                if(message and user):
-                    if(SLACK_BOT_NAME in message):
-                        print("done!")
-                        sc.rtm_send_message(CHANNEL_NAME, data["Plot"])
-                        sc.rtm_send_message(CHANNEL_NAME, sc.api_call("users.list"))
+                        # sc.rtm_send_message(CHANNEL_NAME, sc.api_call("users.list"))
                     else:
-                        sc.rtm_send_message(CHANNEL_NAME, "")
-                        
+                        sc.rtm_send_message(channel, "")
+
 
 if __name__ == '__main__':
     main()

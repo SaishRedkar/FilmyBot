@@ -8,7 +8,7 @@ Returns the id of the movie slackbot
 
 
 SLACK_BOT_TOKEN = os.environ.get('SLACK_BOT_TOKEN')
-BOT_NAME = 'moebot'
+BOT_NAME = 'filmybot'
 
 bot_found = False
 
@@ -31,9 +31,7 @@ if api_call.get('ok'):
 
 if bot_found:
 	print "Bot ID for '" + user['name'] + "' is " + user.get('id')
-	#return str(user.get('id'))
 else:
 	print "could not find bot user with the name " + BOT_NAME
-	#return ""
 
 

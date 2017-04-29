@@ -4,26 +4,19 @@ from slackclient import SlackClient
 
 # get the Slack API token as an environment variable
 SLACK_BOT_TOKEN = os.environ["SLACK_BOT_TOKEN"]
+# this is the bot id obtained from running the get_botid.py script
 BOT_ID = "U53TE8XSS"
 
 SLACK_BOT_NAME = "<@" + BOT_ID + ">"
 
 def main():
-    # print(SLACK_BOT_NAME)
-    # Create the slackclient instance
     sc = SlackClient(SLACK_BOT_TOKEN)
 
     # Connect to slack
     if sc.rtm_connect():
-        # Send first message
-        #sc.rtm_send_message(CHANNEL_NAME, "I'm ALIVE!!!")
-
        while True:
             # Listen for any latest events
             for slack_event in sc.rtm_read():
-                # message = slack_message.get("text")
-                # user = slack_message.get("user")
-                #print(message, user)
 
                 message = slack_event.get("text")
                 user = slack_event.get("user")
@@ -31,7 +24,6 @@ def main():
 
                 if(message and user):
                     if(SLACK_BOT_NAME in message):
-                        #print("done!")
                        
                         movieName = message[13:]
                         if(len(movieName.strip()) == 0):
@@ -40,13 +32,8 @@ def main():
                             try:
                                 url = "http://www.omdbapi.com/?t="+message[13:]
                                 response = requests.get(url)
-                                #print url
                                 if response.status_code==200:
                                     data = response.json()
-                                    #print(data["Poster"])
-                                    # sc.rtm_send_message(channel, data["Title"])
-                                    # sc.rtm_send_message(channel, data["Actors"])
-                                    # sc.rtm_send_message(channel, data["Released"])
                                     intro_msg  = json.dumps([{
                                                         "fallback": "There seems to be some issue with displaying the data",
                                                         "title": message[13:],
@@ -81,7 +68,6 @@ def main():
                             except:
                                 sc.rtm_send_message(channel, "Hey "+"<@"+user+"> !"+" I couldn't find this movie")
 
-                        # sc.rtm_send_message(CHANNEL_NAME, sc.api_call("users.list"))
                     else:
                         sc.rtm_send_message(channel, "")
 

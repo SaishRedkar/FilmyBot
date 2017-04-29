@@ -40,10 +40,10 @@ def main():
                             try:
                                 url = "http://www.omdbapi.com/?t="+message[13:]
                                 response = requests.get(url)
-                                print url
+                                #print url
                                 if response.status_code==200:
                                     data = response.json()
-                                    #print(data)
+                                    #print(data["Poster"])
                                     # sc.rtm_send_message(channel, data["Title"])
                                     # sc.rtm_send_message(channel, data["Actors"])
                                     # sc.rtm_send_message(channel, data["Released"])
@@ -75,17 +75,15 @@ def main():
                                                                             "short": True
                                                                         }
                                                                     ],
+                                                        "image_url": data["Poster"]
                                                         }])
                                     sc.api_call("chat.postMessage", channel=channel, text="Here is some information about "+message[13:], attachments=intro_msg, as_user=True)
                             except:
-                                print("api_call error")
                                 sc.rtm_send_message(channel, "Hey "+"<@"+user+"> !"+" I couldn't find this movie")
 
                         # sc.rtm_send_message(CHANNEL_NAME, sc.api_call("users.list"))
                     else:
                         sc.rtm_send_message(channel, "")
-
-                time.sleep(0.5)
 
 
 if __name__ == '__main__':

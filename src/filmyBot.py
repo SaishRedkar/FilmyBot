@@ -27,7 +27,7 @@ def main():
                        
                         movieName = message[13:]
                         if(len(movieName.strip()) == 0):
-                            sc.rtm_send_message(channel, "This won't work without a movie name!")
+                            sc.rtm_send_message(channel, "I need a movie name to work with.")
                         else:
                             try:
                                 url = "http://www.omdbapi.com/?t="+message[13:]
@@ -60,13 +60,23 @@ def main():
                                                                             "title": "Rated",
                                                                             "value": data["Rated"],
                                                                             "short": True
+                                                                        },
+                                                                        {
+                                                                            "title": "IMDB Rating",
+                                                                            "value": data["Ratings"][0]["Value"],
+                                                                            "short": True
+                                                                        },
+                                                                         {
+                                                                            "title": "Rotten Tomatoes Rating",
+                                                                            "value": data["Ratings"][1]["Value"],
+                                                                            "short": True
                                                                         }
                                                                     ],
                                                         "image_url": data["Poster"]
                                                         }])
-                                    sc.api_call("chat.postMessage", channel=channel, text="Here is some information about "+message[13:], attachments=intro_msg, as_user=True)
+                                    sc.api_call("chat.postMessage", channel=channel, text= "Hey "+"<@"+user+"> !" + "Here is some information about "+message[13:], attachments=intro_msg, as_user=True)
                             except:
-                                sc.rtm_send_message(channel, "Hey "+"<@"+user+"> !"+" I couldn't find this movie")
+                                sc.rtm_send_message(channel, "Hey "+"<@"+user+"> !"+" I couldn't find this movie. Try some other movie.")
 
                     else:
                         sc.rtm_send_message(channel, "")

@@ -12,6 +12,13 @@ SLACK_BOT_NAME = "<@" + BOT_ID + ">"
 def main():
     sc = SlackClient(SLACK_BOT_TOKEN)
 
+    error_msg  = json.dumps([{
+                            "color":"#e74c3c",
+                            "attachment_type": "default",
+                            "text": "",
+                            "image_url":"http://i2.kym-cdn.com/photos/images/original/000/329/784/bd6.jpg"                            
+                            }])
+
     # Connect to slack
     if sc.rtm_connect():
        while True:
@@ -27,13 +34,14 @@ def main():
                        
                         movieName = message[13:]
                         if(len(movieName.strip()) == 0):
-                            sc.rtm_send_message(channel, "I need a movie name to work with.")
+                            sc.api_call("chat.postMessage", channel=channel, text="", attachments=error_msg, as_user=True)
                         else:
                             try:
                                 url = "http://www.omdbapi.com/?t="+message[13:]
-                                response = requests.get(url)
+                                response = requests.get(url)                                
                                 if response.status_code==200:
                                     data = response.json()
+                                    print "Calling "+url
                                     intro_msg  = json.dumps([{
                                                         "fallback": "There seems to be some issue with displaying the data",
                                                         "title": message[13:],
@@ -62,22 +70,17 @@ def main():
                                                                             "short": True
                                                                         },
                                                                         {
-                                                                            "title": "IMDB Rating",
+                                                                            "title": "IMDB Ratings",
                                                                             "value": data["Ratings"][0]["Value"],
                                                                             "short": True
-                                                                        },
-                                                                         {
-                                                                            "title": "Rotten Tomatoes Rating",
-                                                                            "value": data["Ratings"][1]["Value"],
-                                                                            "short": True
-                                                                        }
+                                                                        }                                                                
                                                                     ],
                                                         "image_url": data["Poster"]
                                                         }])
-                                    sc.api_call("chat.postMessage", channel=channel, text= "Hey "+"<@"+user+"> !" + "Here is some information about "+message[13:], attachments=intro_msg, as_user=True)
+                                    sc.api_call("chat.postMessage", channel=channel, text="Here is some information about "+message[13:], attachments=intro_msg, as_user=True)
                             except:
-                                sc.rtm_send_message(channel, "Hey "+"<@"+user+"> !"+" I couldn't find this movie. Try some other movie.")
-
+                                sc.rtm_send_message(channel, "Hey "+"<@"+user+"> !"+" I couldn't find this movie")
+        
                     else:
                         sc.rtm_send_message(channel, "")
 

@@ -8,3 +8,6 @@ A Slack bot for getting movie information while communicating using Slack
 - A Slack account with an API token
 
 
+![](https://media.giphy.com/media/ATHbDClEEA1m8/giphy.gif)
+
+

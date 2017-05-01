@@ -8,9 +8,9 @@ A Slack bot for getting movie information while communicating using Slack
 - [A Slack account with an API token](https://api.slack.com/)
 
 # Setting up the environment
-First, clone the repository on your local machine
+First, [fork the main repo](https://github.com/SaishRedkar/FilmyBot). Then clone the forked repository on your local machine
 
-    git clone https://github.com/SaishRedkar/FilmyBot.git
+    git clone https://github.com/YourName/FilmyBot.git
     
 Navigate to the directory and create a new virtual environment
     
@@ -33,7 +33,7 @@ Copy the bot API access token and export is an environment variable named SLACK_
         export SLACK_BOT_TOKEN='your Slack API token'
 
 # Getting the bot ID
-Run the get_botid.py script to get the bot ID
+Run the get_botid.py script to get the bot ID. In the script, change the value of 'BOT_NAME' to the name of the bot that you created. 
     
     python get_botid.py
 

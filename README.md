@@ -26,8 +26,18 @@ Then install the Python slackclient library with the pip command
     
 The next step is to create a bot user for our Slack team and obtain the API access token.
 
-    
+Create a new bot user by following the [create a new bot user](https://my.slack.com/services/new/bot) instructions on the [Bot Users pages](https://api.slack.com/bot-users)
 
+Copy the bot API access token and export is an environment variable named SLACK_BOT_TOKEN
+
+        export SLACK_BOT_TOKEN='your Slack API token'
+
+# Getting the bot ID
+Run the get_botid.py script to get the bot ID
+    
+    python get_botid.py
+
+The id returned by this script is your bot ID which you'll be using in the filmybot.py script to start the Slack bot.
 ![](https://media.giphy.com/media/ATHbDClEEA1m8/giphy.gif)
 
 
